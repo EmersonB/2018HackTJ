@@ -14,10 +14,12 @@ app.use(bodyParser.urlencoded());
 app.use(express.static(__dirname + '/'));
 app.use('/api', router);
 
-app.set('port', process.env.PORT || 8080);
-var listener = app.listen(app.get('port'), function() {
-  console.log( listener.address().port );
-});
+// app.set('port', process.env.PORT || 8080);
+// var listener = app.listen(app.get('port'), function() {
+//   console.log( listener.address().port );
+// });
+
+app.listen(3000, () => console.log('Server running on port 3000'))
 
 firebase.initializeApp({
   databaseURL: "https://hacktj2018.firebaseio.com",
