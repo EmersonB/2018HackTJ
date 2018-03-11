@@ -10,10 +10,10 @@
 <script>
 $.ajax({
           type: "POST",
-          url: 'http://localhost:3000/api/1/location',
+          url: 'http://ec2-35-167-101-67.us-west-2.compute.amazonaws.com:3000/api/1/location',
           data: {
-              'lat': 123,
-							'long': 123
+              'lat': 123.25,
+							'long': 123.25
           },
           dataType:'json',
           success: function(data){

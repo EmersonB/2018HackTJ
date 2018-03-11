@@ -31,6 +31,7 @@ firebase.initializeApp({
 var db = firebase.database();
 var ref = db.ref("ids");
 
+//Not needed??
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
@@ -103,10 +104,14 @@ router.route('/:device_id/route')
     .post(function(req,res){
       console.log(req.body);
       var usersRef = ref.child(req.params.device_id).child("location");
+      if(req.body == {}){
+        res.error("no body");
+      }
       usersRef.set({
           lat: req.body.lat,
           long: req.body.long
       });
+      res.end("Success");
     })
     .put(function(req, res){
 
@@ -116,9 +121,33 @@ router.route('/:device_id/route')
       // usersRef.set(null);
     });
 
+    router.route('/:device_id/instruction')
+      .get(function(req,res){
+        ref.child(req.params.device_id).child("location").on("value", function(snapshot) {
+          console.log(snapshot.val());
+          res.json(snapshot.val());
+        }, function (errorObject) {
+          console.log("The read failed: " + errorObject.code);
+        });
+      })
+      .post(function(req,res){
+        console.log(req.body);
+        var usersRef = ref.child(req.params.device_id).child("location");
+        usersRef.set({
+            lat: req.body.lat,
+            long: req.body.long
+        });
+      })
+      .put(function(req, res){
 
-  function test(){
-    const url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM&key=AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM&destination=MetLife Stadium 1 MetLife Stadium Dr East Rutherford, NJ 07073&destination=MetLife Stadium Dr East Rutherford, NJ 07073&origin=75 9th Ave New York, NY&origin=75 9th Ave, New York, NY&mode=driving";
+      })
+      .delete(function(req,res){
+        // var usersRef = ref.child(req.params.name);
+        // usersRef.set(null);
+      });
+
+  function google_maps_info(origin, destination){
+    const url = construct_url(origin, destination);
     https.get(url, response => {
       response.setEncoding("utf8");
       var body = "";
@@ -128,6 +157,6 @@ router.route('/:device_id/route')
     });
   }
 
-  function construct_url(destination, origin, mode){
-
+  function construct_url(origin, destination){
+      return "https://maps.googleapis.com/maps/api/directions/json?mode=driving&origin="+origin+"&destination="+destination+"&key="+gm_api_key;
   }
