@@ -12,14 +12,17 @@ var app = express();
 const gm_api_key = "AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM";
 
 
-app.use(express.static(__dirname + '/'));
-app.use('/api', router);
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded())
 
 // parse application/json
 app.use(bodyParser.json())
+
+app.use(express.static(__dirname + '/'));
+app.use('/api', router);
+
+
+
 
 // app.set('port', process.env.PORT || 8080);
 // var listener = app.listen(app.get('port'), function() {
@@ -41,25 +44,6 @@ var ref = db.ref("ids");
 app.post("/", function (req, res) {
   console.log(req.body) // populated!
   res.send(200, req.body);
-});
-
-app.use(function (req, res, next) {
-
-    // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
-
-    // Request methods you wish to allow
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    // Set to true if you need the website to include cookies in the requests sent
-    // to the API (e.g. in case you use sessions)
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    // Pass to next layer of middleware
-    next();
 });
 
 app.get('/', function(req, res) {
@@ -113,7 +97,7 @@ router.route('/:device_id/route')
       });
     })
     .post(function(req,res){
-      console.log(req.body);
+      console.log(req.body) // populated!
       var usersRef = ref.child(req.params.device_id).child("location");
       if(req.body == {}){
         res.error("no body");
@@ -122,7 +106,7 @@ router.route('/:device_id/route')
           lat: req.body.lat,
           long: req.body.long
       });
-      res.end("Success");
+      res.send(200, "Success");
     })
     .put(function(req, res){
 
