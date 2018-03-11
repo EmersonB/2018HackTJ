@@ -11,7 +11,8 @@
   "dependencies": {
     "body-parser": "latest",
     "express": "4.13.3",
-    "firebase": "latest"
+    "firebase": "latest",
+    "request": "latest"
   },
   "keywords": [
     "node",

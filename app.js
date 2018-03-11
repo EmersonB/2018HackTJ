@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path')
 var bodyParser = require('body-parser');
 var firebase = require("firebase");
+var request = require("request");
 
 const https = require("https");
 
@@ -116,42 +117,73 @@ router.route('/:device_id/route')
       // usersRef.set(null);
     });
 
-    router.route('/:device_id/instruction')
+    router.route('/:device_id/instructions')
       .get(function(req,res){
-        ref.child(req.params.device_id).child("location").on("value", function(snapshot) {
-          console.log(snapshot.val());
-          res.json(snapshot.val());
+        ref.child(req.params.device_id).on("value", function(snapshot) {
+          var current_lat = snapshot.val().location.lat;
+          var current_long = snapshot.val().location.long;
+          var end_lat = snapshot.val().route.end_lat;
+          var end_long = snapshot.val().route.end_long;
+
+          var origin = {"lat": current_lat, "long": current_long}
+          var destination = {"lat": end_lat, "long": end_long}
+
+
+          const url = construct_url(origin.lat, origin.long, destination.lat, destination.long);
+          console.log(url);
+          request(url, { json: true }, (err, response, body) => {
+            if (err) { return console.log(err); }
+            var next = body.routes[0].legs[0].steps[0].html_instructions;
+            next = replaceAll(next,"<b>", "");
+            next = replaceAll(next,"</b>", "");
+            res.json({"instruction": next});
+          });
+
+          // https.get(url, response => {
+          //   response.setEncoding("utf8");
+          //   response.on("data", data => {
+          //     console.log('hello' + data);
+          //   });
+          // });
+
+          // res.json(snapshot.val());
+          // const url = construct_url(origin, destination);
+          // https.get(url, response => {
+          //   response.setEncoding("utf8");
+          //   response.on("data", data => {
+          //     console.log(data)
+          //   });
+          // });
         }, function (errorObject) {
           console.log("The read failed: " + errorObject.code);
         });
       })
-      .post(function(req,res){
-        console.log(req.body);
-        var usersRef = ref.child(req.params.device_id).child("location");
-        usersRef.set({
-            lat: req.body.lat,
-            long: req.body.long
-        });
-      })
-      .put(function(req, res){
 
-      })
-      .delete(function(req,res){
-        // var usersRef = ref.child(req.params.name);
-        // usersRef.set(null);
-      });
 
   function google_maps_info(origin, destination){
-    const url = construct_url(origin, destination);
+    const url = construct_url(origin.lat, origin.long, destination.lat, destination.long);
     https.get(url, response => {
       response.setEncoding("utf8");
-      var body = "";
       response.on("data", data => {
         console.log(data)
       });
     });
   }
 
-  function construct_url(origin, destination){
-      return "https://maps.googleapis.com/maps/api/directions/json?mode=driving&origin="+origin+"&destination="+destination+"&key="+gm_api_key;
+  function reverse_geo_location(lat, long){
+    const url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+lat+","+long+"&key"+gm_api_key;
+    https.get(url, response => {
+      response.setEncoding("utf8");
+      response.on("data", data => {
+        console.log(data)
+      });
+    });
   }
+
+  function construct_url(origin_lat, origin_long, destination_lat, destination_long){
+      return "https://maps.googleapis.com/maps/api/directions/json?mode=driving&origin="+origin_lat+","+origin_long+"&destination="+destination_lat+","+destination_long+"&key="+gm_api_key;
+  }
+
+  function replaceAll(str, find, replace) {
+    return str.replace(new RegExp(find, 'g'), replace);
+}
