@@ -15,7 +15,10 @@ const gm_api_key = "AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM";
 app.use(express.static(__dirname + '/'));
 app.use('/api', router);
 
+// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded())
+
+// parse application/json
 app.use(bodyParser.json())
 
 // app.set('port', process.env.PORT || 8080);
@@ -34,6 +37,12 @@ var db = firebase.database();
 var ref = db.ref("ids");
 
 //Not needed??
+
+app.post("/", function (req, res) {
+  console.log(req.body) // populated!
+  res.send(200, req.body);
+});
+
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
