@@ -136,6 +136,7 @@ router.route('/:device_id/route')
             var next = body.routes[0].legs[0].steps[0].html_instructions;
             next = replaceAll(next,"<b>", "");
             next = replaceAll(next,"</b>", "");
+            next = toTitleCase(next);
             res.send(next);
           });
 
@@ -186,4 +187,9 @@ router.route('/:device_id/route')
 
   function replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
+}
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
