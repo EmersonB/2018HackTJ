@@ -121,7 +121,7 @@ router.route('/:device_id/route')
     const url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM&key=AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM&destination=MetLife Stadium 1 MetLife Stadium Dr East Rutherford, NJ 07073&destination=MetLife Stadium Dr East Rutherford, NJ 07073&origin=75 9th Ave New York, NY&origin=75 9th Ave, New York, NY&mode=driving";
     https.get(url, response => {
       response.setEncoding("utf8");
-      let body = "";
+      var body = "";
       response.on("data", data => {
         console.log(data)
       });
