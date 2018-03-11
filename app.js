@@ -12,9 +12,11 @@ var app = express();
 const gm_api_key = "AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM";
 
 
-app.use(bodyParser.urlencoded());
 app.use(express.static(__dirname + '/'));
 app.use('/api', router);
+
+app.use(bodyParser.urlencoded())
+app.use(bodyParser.json())
 
 // app.set('port', process.env.PORT || 8080);
 // var listener = app.listen(app.get('port'), function() {
