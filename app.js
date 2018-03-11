@@ -4,6 +4,8 @@ var path = require('path')
 var bodyParser = require('body-parser');
 var firebase = require("firebase");
 
+const https = require("https");
+
 var router = express.Router();
 var app = express();
 
@@ -53,6 +55,7 @@ router.route('/:device_id/route')
     });
   })
   .post(function(req,res){
+    console.log(req.body);
     var usersRef = ref.child(req.params.device_id).child("route");
     usersRef.set({
       start_lat: req.body.start.lat,
@@ -79,6 +82,7 @@ router.route('/:device_id/route')
       });
     })
     .post(function(req,res){
+      console.log(req.body);
       var usersRef = ref.child(req.params.device_id).child("location");
       usersRef.set({
           lat: req.body.lat,
