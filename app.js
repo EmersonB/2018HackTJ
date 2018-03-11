@@ -79,6 +79,7 @@ router.route('/:device_id/route')
       end_lat: req.body.end.lat,
       end_long: req.body.end.long
     });
+    res.send("success");
   })
   .put(function(req, res){
 
