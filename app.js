@@ -53,7 +53,7 @@ app.get('/', function(req, res) {
 
 router.route('/ids')
   .get(function(req,res){
-    ref.on("value", function(snapshot) {
+    ref.once("value", function(snapshot) {
       console.log(snapshot.val());
       res.json(snapshot.val());
     }, function (errorObject) {
@@ -63,7 +63,7 @@ router.route('/ids')
 
 router.route('/:device_id/route')
   .get(function(req,res){
-    ref.child(req.params.device_id).child("route").on("value", function(snapshot) {
+    ref.child(req.params.device_id).child("route").once("value", function(snapshot) {
       console.log(snapshot.val());
       res.json(snapshot.val());
     }, function (errorObject) {
@@ -91,7 +91,7 @@ router.route('/:device_id/route')
 
   router.route('/:device_id/location')
     .get(function(req,res){
-      ref.child(req.params.device_id).child("location").on("value", function(snapshot) {
+      ref.child(req.params.device_id).child("location").once("value", function(snapshot) {
         console.log(snapshot.val());
         res.json(snapshot.val());
       }, function (errorObject) {
@@ -120,7 +120,7 @@ router.route('/:device_id/route')
 
     router.route('/:device_id/instructions')
       .get(function(req,res){
-        ref.child(req.params.device_id).on("value", function(snapshot) {
+        ref.child(req.params.device_id).once("value", function(snapshot) {
           var current_lat = snapshot.val().location.lat;
           var current_long = snapshot.val().location.long;
           var end_lat = snapshot.val().route.end_lat;
