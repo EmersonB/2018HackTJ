@@ -136,7 +136,7 @@ router.route('/:device_id/route')
             var next = body.routes[0].legs[0].steps[0].html_instructions;
             next = replaceAll(next,"<b>", "");
             next = replaceAll(next,"</b>", "");
-            res.json({"instruction": next});
+            res.send(next);
           });
 
           // https.get(url, response => {
