@@ -9,13 +9,11 @@
 </body>
 <script>
 $.ajax({
-          type: "GET",
-          url: 'https://maps.googleapis.com/maps/api/directions/json?origin=75+9th+Ave+New+York,+NY&destination=MetLife+Stadium+1+MetLife+Stadium+Dr+East+Rutherford,+NJ+07073&key=AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM',
+          type: "POST",
+          url: 'http://localhost:3000/api/1/location',
           data: {
-              'origin': "75 9th Ave, New York, NY",
-							'destination': "MetLife Stadium Dr East Rutherford, NJ 07073",
-							'mode': 'driving',
-							'key': 'AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM'
+              'lat': 123,
+							'long': 123
           },
           dataType:'json',
           success: function(data){

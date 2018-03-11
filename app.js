@@ -31,6 +31,25 @@ firebase.initializeApp({
 var db = firebase.database();
 var ref = db.ref("ids");
 
+app.use(function (req, res, next) {
+
+    // Website you wish to allow to connect
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    // Pass to next layer of middleware
+    next();
+});
+
 app.get('/', function(req, res) {
   res.sendFile(__dirname+'/index.html');
 });
@@ -96,3 +115,19 @@ router.route('/:device_id/route')
       // var usersRef = ref.child(req.params.name);
       // usersRef.set(null);
     });
+
+
+  function test(){
+    const url = "https://maps.googleapis.com/maps/api/directions/json?key=AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM&key=AIzaSyDKxDdzzYAtOJDb-rgiJIRJy-w-Fcr1wOM&destination=MetLife Stadium 1 MetLife Stadium Dr East Rutherford, NJ 07073&destination=MetLife Stadium Dr East Rutherford, NJ 07073&origin=75 9th Ave New York, NY&origin=75 9th Ave, New York, NY&mode=driving";
+    https.get(url, response => {
+      response.setEncoding("utf8");
+      let body = "";
+      response.on("data", data => {
+        console.log(data)
+      });
+    });
+  }
+
+  function construct_url(destination, origin, mode){
+
+  }
